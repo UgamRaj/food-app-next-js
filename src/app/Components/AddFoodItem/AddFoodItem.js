@@ -1,7 +1,8 @@
 import { useState } from "react";
 import "../LoginSignUp/LoginSignUp.css";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
+import Loader from "../Loader/Loader";
 
 const AddFoodItem = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,7 @@ const AddFoodItem = () => {
     description: "",
   });
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const changehandler = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,6 +21,16 @@ const AddFoodItem = () => {
   const onAddFoodHandler = async (e) => {
     e.preventDefault();
     // console.log(formData);
+    if (
+      !formData.name ||
+      !formData.price ||
+      !formData.imagePath ||
+      !formData.description
+    ) {
+      return setError(true);
+    }
+    setError(false);
+    setLoading(true);
     const restroData = JSON.parse(localStorage.getItem("foodData"));
     let restoId;
     if (restroData) {
@@ -33,92 +45,99 @@ const AddFoodItem = () => {
       );
       console.log("🚀 ~ onAddFoodHandler ~ data:", data);
       if (data.success) {
-        console.log("food item added");
+        setLoading(false);
+        // console.log("food item added");
         toast.success("food item added");
       }
     } catch (error) {
       console.log("🚀 ~ onAddFoodHandler ~ error:", error);
+      setLoading(false);
+      toast.error("Something went wrong");
     }
   };
 
   return (
-    <div className="formContainer">
-      <form className="form" onSubmit={onAddFoodHandler}>
-        <p className="title">Add New Food Item</p>
+    <>
+      {loading && <Loader />}
 
-        <label>
-          <input
-            className="input"
-            type="text"
-            placeholder=""
-            required
-            name="name"
-            value={formData.name}
-            onChange={changehandler}
-          />
-          {error && !formData.name ? (
-            <span className="inputError">*Please Enter Name</span>
-          ) : (
-            <span>Enter Name</span>
-          )}
-        </label>
+      <div className="formContainer">
+        <form className="form" onSubmit={onAddFoodHandler}>
+          <p className="title">Add New Food Item</p>
 
-        <label>
-          <input
-            className="input"
-            type="text"
-            placeholder=""
-            required
-            name="price"
-            value={formData.price}
-            onChange={changehandler}
-          />
-          {error && !formData.price ? (
-            <span className="inputError">*Please Enter Price</span>
-          ) : (
-            <span>Enter Price</span>
-          )}
-        </label>
+          <label>
+            <input
+              className="input"
+              type="text"
+              placeholder=""
+              required
+              name="name"
+              value={formData.name}
+              onChange={changehandler}
+            />
+            {error && !formData.name ? (
+              <span className="inputError">*Please Enter Name</span>
+            ) : (
+              <span>Enter Name</span>
+            )}
+          </label>
 
-        <label>
-          <input
-            className="input"
-            type="text"
-            placeholder=""
-            required
-            name="imagePath"
-            value={formData.imagePath}
-            onChange={changehandler}
-          />
-          {error && !formData.imagePath ? (
-            <span className="inputError">*Please Enter Path</span>
-          ) : (
-            <span>Enter Path</span>
-          )}
-        </label>
+          <label>
+            <input
+              className="input"
+              type="text"
+              placeholder=""
+              required
+              name="price"
+              value={formData.price}
+              onChange={changehandler}
+            />
+            {error && !formData.price ? (
+              <span className="inputError">*Please Enter Price</span>
+            ) : (
+              <span>Enter Price</span>
+            )}
+          </label>
 
-        <label>
-          <input
-            className="input"
-            type="text"
-            placeholder=""
-            required
-            name="description"
-            value={formData.description}
-            onChange={changehandler}
-          />
-          {error && !formData.description ? (
-            <span className="inputError">*Please Enter Description</span>
-          ) : (
-            <span>Enter Description</span>
-          )}
-        </label>
+          <label>
+            <input
+              className="input"
+              type="text"
+              placeholder=""
+              required
+              name="imagePath"
+              value={formData.imagePath}
+              onChange={changehandler}
+            />
+            {error && !formData.imagePath ? (
+              <span className="inputError">*Please Enter Path</span>
+            ) : (
+              <span>Enter Path</span>
+            )}
+          </label>
 
-        <button className="submit" type="submit">
-          Add Food
-        </button>
-      </form>
-    </div>
+          <label>
+            <input
+              className="input"
+              type="text"
+              placeholder=""
+              required
+              name="description"
+              value={formData.description}
+              onChange={changehandler}
+            />
+            {error && !formData.description ? (
+              <span className="inputError">*Please Enter Description</span>
+            ) : (
+              <span>Enter Description</span>
+            )}
+          </label>
+
+          <button className="submit" type="submit">
+            Add Food
+          </button>
+        </form>
+      </div>
+    </>
   );
 };
 
