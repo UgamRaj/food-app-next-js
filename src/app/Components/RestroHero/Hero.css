@@ -1,0 +1,59 @@
+.mainPageBanner {
+  background-image: url("/foodBanner.avif");
+  background-color: rgb(0, 0, 0, 0.7);
+  background-blend-mode: multiply;
+  padding: 2.1rem;
+  height: 20rem;
+  text-align: center;
+  color: #fff;
+}
+.mainPageBanner h1 {
+  font-size: 2.5rem;
+}
+
+.inputContainer input:focus {
+  outline: none;
+}
+.inputContainer {
+  background-color: #fff;
+  padding: 5px;
+  margin: auto;
+  width: 60%;
+  border-radius: 0.3rem;
+}
+.selectInput,
+.searchInput {
+  height: 2.5rem;
+  border: 0;
+  padding-left: 1rem;
+}
+.selectInput {
+  width: 35%;
+}
+
+.searchInput {
+  width: 50%;
+  border-left: 2px solid #ccc;
+}
+
+.locationsList {
+  color: black;
+  list-style-type: none;
+  position: absolute;
+  background-color: #fff;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  margin-left: -5px;
+  border: 1px solid #ccc;
+}
+.locationsList li {
+  width: 14rem;
+  padding: 0.3rem;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.locationsList li:hover {
+  background-color: rgba(127, 255, 212, 0.285);
+}
