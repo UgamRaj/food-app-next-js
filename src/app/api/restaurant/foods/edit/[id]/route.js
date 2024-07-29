@@ -3,26 +3,30 @@ import { foodSchema } from "@/app/lib/foodModel";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
+// Getting perticular id item
 export async function GET(req, content) {
   const { id } = content.params;
-  //   console.log("🚀 ~ GET ~ id:", id);
   let success = false;
-
   await mongoose.connect(connectionStr);
-  const result = await foodSchema.find({ restoId: id });
+
+  const result = await foodSchema.findOne({ _id: id });
   if (result) {
     success = true;
   }
   return NextResponse.json({ result, success });
 }
 
-//! Delete food Api
+// Updating food item
 
-export async function DELETE(req, content) {
+export async function PUT(req, content) {
   const { id } = content.params;
+
+  const payload = await req.json();
+
   let success = false;
   await mongoose.connect(connectionStr);
-  const result = await foodSchema.deleteOne({ _id: id });
+
+  const result = await foodSchema.findOneAndUpdate({ _id: id }, payload);
   if (result) {
     success = true;
   }

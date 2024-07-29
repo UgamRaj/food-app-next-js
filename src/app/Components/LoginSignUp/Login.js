@@ -4,6 +4,7 @@ import { IoEye } from "react-icons/io5";
 import { IoMdEyeOff } from "react-icons/io";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Loader from "../Loader/Loader";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,6 +13,7 @@ const Login = () => {
     email: "",
   });
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const togglePasswordVisibility = () => {
@@ -24,7 +26,7 @@ const Login = () => {
 
   const loginHandler = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     if (!formData.email || !formData.password) {
       return setError(true);
     } else {
@@ -41,72 +43,76 @@ const Login = () => {
       );
 
       if (data.success) {
+        setLoading(false);
         const { result } = data;
         delete result.password;
         localStorage.setItem("foodData", JSON.stringify(result));
-
         router.push("/restaurant/dashboard");
       }
     } catch (error) {
+      setLoading(false);
       console.log("🚀 ~ loginHandler ~ error:", error);
     }
   };
 
   return (
-    <div className="formContainer">
-      <form className="form" onSubmit={loginHandler}>
-        <p className="title">Login</p>
-        <p className="message">Login now and get full access to our app.</p>
-        <label>
-          <input
-            className="input"
-            type="email"
-            placeholder=""
-            required
-            name="email"
-            value={formData.email}
-            onChange={changehandler}
-          />
-          {error && !formData.email ? (
-            <span className="inputError">*Please Enter Email</span>
-          ) : (
-            <span>Enter Email</span>
-          )}
-        </label>
-
-        <label>
-          <input
-            className="input"
-            type={showPassword ? "text" : "password"}
-            placeholder=""
-            required
-            name="password"
-            value={formData.password}
-            onChange={changehandler}
-          />
-          {error && !formData.password ? (
-            <span className="inputError">*Please Enter Password</span>
-          ) : (
-            <span>Enter Password</span>
-          )}
-          <button
-            type="button"
-            className="toggle-button"
-            onClick={togglePasswordVisibility}
-          >
-            {showPassword ? (
-              <IoEye size={"1.5rem"} color="gray" />
+    <>
+      {loading && <Loader />}
+      <div className="formContainer">
+        <form className="form" onSubmit={loginHandler}>
+          <p className="title">Login</p>
+          <p className="message">Login now and get full access to our app.</p>
+          <label>
+            <input
+              className="input"
+              type="email"
+              placeholder=""
+              required
+              name="email"
+              value={formData.email}
+              onChange={changehandler}
+            />
+            {error && !formData.email ? (
+              <span className="inputError">*Please Enter Email</span>
             ) : (
-              <IoMdEyeOff size={"1.5rem"} color="gray" />
+              <span>Enter Email</span>
             )}
-          </button>
-        </label>
+          </label>
 
-        <button className="submit" type="submit">
-          Submit
-        </button>
-      </form>
-    </div>
+          <label>
+            <input
+              className="input"
+              type={showPassword ? "text" : "password"}
+              placeholder=""
+              required
+              name="password"
+              value={formData.password}
+              onChange={changehandler}
+            />
+            {error && !formData.password ? (
+              <span className="inputError">*Please Enter Password</span>
+            ) : (
+              <span>Enter Password</span>
+            )}
+            <button
+              type="button"
+              className="toggle-button"
+              onClick={togglePasswordVisibility}
+            >
+              {showPassword ? (
+                <IoEye size={"1.5rem"} color="gray" />
+              ) : (
+                <IoMdEyeOff size={"1.5rem"} color="gray" />
+              )}
+            </button>
+          </label>
+
+          <button className="submit" type="submit">
+            Submit
+          </button>
+        </form>
+      </div>
+    </>
   );
 };
 

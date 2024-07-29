@@ -13,7 +13,7 @@ const Dashboard = () => {
       <Header />
       <button onClick={() => setAddItem(true)}>Add Food</button>
       <button onClick={() => setAddItem(false)}>Dashboard</button>
-      {additem ? <AddFoodItem /> : <FoodItemList />}
+      {additem ? <AddFoodItem setAddItem={setAddItem} /> : <FoodItemList />}
     </div>
   );
 };
