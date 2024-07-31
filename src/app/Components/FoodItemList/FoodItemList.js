@@ -4,35 +4,20 @@ import axios from "axios";
 import Loader from "../Loader/Loader";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllFoodList } from "@/app/redux/restroSlice";
 
 const FoodItemList = () => {
-  const [foodItems, setFoodItems] = useState([]);
+  // const [foodItems, setFoodItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { isLoading, foodItems } = useSelector((state) => state.restroData);
+  const dispatch = useDispatch();
 
   const getFoodItem = async () => {
-    setLoading(true);
+    // setLoading(true);
 
-    const restroData = JSON.parse(localStorage.getItem("foodData"));
-    if (!restroData) {
-      toast.warn("Please Login First");
-      return false;
-    }
-
-    try {
-      const { data } = await axios.get(
-        `http://localhost:3000/api/restaurant/foods/${restroData._id}`
-      );
-      //   console.log("🚀 ~ getFoodItem ~ data:", data);
-
-      if (data.success) {
-        setFoodItems(data.result);
-        setLoading(false);
-      }
-    } catch (error) {
-      setLoading(false);
-      console.log("🚀 ~ getFoodItem ~ error:", error);
-    }
+    dispatch(getAllFoodList());
   };
 
   useEffect(() => {
@@ -61,7 +46,7 @@ const FoodItemList = () => {
 
   return (
     <>
-      {loading && <Loader />}
+      {isLoading && <Loader />}
       <div className="foodItemList">
         <h2>Food Items</h2>
         <table>

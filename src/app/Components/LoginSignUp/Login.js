@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./LoginSignUp.css";
 import { IoEye } from "react-icons/io5";
 import { IoMdEyeOff } from "react-icons/io";
-import axios from "axios";
+// import axios from "axios";
 import { useRouter } from "next/navigation";
 import Loader from "../Loader/Loader";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "@/app/redux/userSlice";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,8 +15,12 @@ const Login = () => {
     email: "",
   });
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { isLoading, isUserAuthenticated } = useSelector(
+    (state) => state.userData
+  );
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -26,38 +32,26 @@ const Login = () => {
 
   const loginHandler = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    // setLoading(true);
     if (!formData.email || !formData.password) {
       return setError(true);
     } else {
       setError(false);
     }
 
-    try {
-      const body = JSON.stringify({ ...formData, login: true });
-      // console.log("🚀 ~ loginHandler ~ body:", body);
-
-      const { data } = await axios.post(
-        "http://localhost:3000/api/restaurant",
-        body
-      );
-
-      if (data.success) {
-        setLoading(false);
-        const { result } = data;
-        delete result.password;
-        localStorage.setItem("foodData", JSON.stringify(result));
-        router.push("/restaurant/dashboard");
-      }
-    } catch (error) {
-      setLoading(false);
-      console.log("🚀 ~ loginHandler ~ error:", error);
-    }
+    //! Dispatch Data
+    dispatch(loginUser(formData));
   };
+
+  useEffect(() => {
+    if (isUserAuthenticated) {
+      router.push("/restaurant/dashboard");
+    }
+  }, [isUserAuthenticated]);
 
   return (
     <>
-      {loading && <Loader />}
+      {isLoading && <Loader />}
       <div className="formContainer">
         <form className="form" onSubmit={loginHandler}>
           <p className="title">Login</p>

@@ -1,14 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./LoginSignUp.css";
 import { IoEye } from "react-icons/io5";
 import { IoMdEyeOff } from "react-icons/io";
-import axios from "axios";
+// import axios from "axios";
 import { useRouter } from "next/navigation";
 import Loader from "../Loader/Loader";
+import { useDispatch, useSelector } from "react-redux";
+import { signUpUser } from "@/app/redux/userSlice";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { isLoading, isUserAuthenticated } = useSelector(
+    (state) => state.userData
+  );
   const [formData, setFormData] = useState({
     password: "",
     email: "",
@@ -18,7 +24,7 @@ const Signup = () => {
     phone: "",
   });
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -29,7 +35,9 @@ const Signup = () => {
 
   const signUpHandler = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    // console.log("🚀 ~ Signup ~ user:", user);
+
+    // setLoading(true);
     //Form Validation
     if (
       !formData.email ||
@@ -43,31 +51,19 @@ const Signup = () => {
     } else {
       setError(false);
     }
-    // console.log(formData);
-    const body = JSON.stringify(formData);
-    try {
-      const { data } = await axios.post(
-        "http://localhost:3000/api/restaurant",
-        body
-      );
-
-      if (data.success) {
-        setLoading(false);
-        const { result } = data;
-        console.log("🚀 ~ signUpHandler ~ result:", result);
-        delete result.password;
-        localStorage.setItem("foodData", JSON.stringify(result));
-        router.push("/restaurant/dashboard");
-      }
-    } catch (error) {
-      setLoading(false);
-      console.log("🚀 ~ signUpHandler ~ error:", error);
-    }
+    // return true;
+    dispatch(signUpUser(formData));
   };
+
+  useEffect(() => {
+    if (isUserAuthenticated) {
+      router.push("/restaurant/dashboard");
+    }
+  }, [isUserAuthenticated]);
 
   return (
     <>
-      {loading && <Loader />}
+      {isLoading && <Loader />}
       <div className="formContainer">
         <form className="form">
           <p className="title">Sign Up</p>
