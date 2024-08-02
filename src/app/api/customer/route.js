@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 export const GET = async (req) => {
   const queryParams = req.nextUrl.searchParams;
-  //   console.log("🚀 ~ GET ~ queryParams:", queryParams.get("location"));
+  console.log("🚀 ~ GET ~ queryParams:", queryParams.get("restro"));
   let result = [],
     filter = {};
   let success = false;
@@ -24,5 +24,6 @@ export const GET = async (req) => {
   //! Connection
   await mongoose.connect(connectionStr);
   result = await restaurantSchema.find(filter);
+  success = true;
   return NextResponse.json({ result, success });
 };
