@@ -1,6 +1,7 @@
 body {
   background-color: rgb(50, 37, 61);
   color: #fff;
+  margin: 0;
 }
 .loginBtnContainer {
   display: flex;

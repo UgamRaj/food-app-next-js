@@ -15,6 +15,7 @@
 .restroDetails {
   display: flex;
   background-color: rgba(255, 166, 0, 0.522);
+  padding: 0.2rem 0.7rem;
   p {
     width: 50%;
   }
@@ -35,6 +36,11 @@
   color: orange;
   width: 18rem;
   height: 23rem;
+  background-color: #faebd72b;
+  transition: all 0.25s;
+  &:hover {
+    box-shadow: 10px 10px 34px currentColor, 10px 10px 60px currentColor;
+  }
 }
 
 .foodItemList .foodImage {
@@ -48,10 +54,20 @@
 }
 .foodItemDetailsText {
   padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 8.2rem;
 }
+.foodItemDetailsTextBox {
+  line-height: 1.4;
+}
+
 .foodItemDetailsText p {
   margin: 0;
+  margin-top: 0;
 }
+
 .foodItemDescription {
   opacity: 0.7;
 }
@@ -60,7 +76,7 @@
 .foodDetailsBtnContainer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 .CartBtn {
