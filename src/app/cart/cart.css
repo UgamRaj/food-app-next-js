@@ -51,3 +51,25 @@
 h5 {
   margin: 0;
 }
+
+.cartTotalPriceContainer {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  /* border: 1px solid red; */
+  width: 62%;
+  margin: 1rem auto;
+  background-color: #201e43;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  line-height: 1.5;
+}
+
+.cartTotalPriceContainer .cartPrice {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  /* color: orange; */
+  font-size: 1.2rem;
+}
