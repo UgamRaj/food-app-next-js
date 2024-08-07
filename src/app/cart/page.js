@@ -1,11 +1,38 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import DeleteButton from "../Components/Button/DeleteButton";
 import Header from "../Components/CustomerHeader/Header";
 import Footer from "../Components/RestroFooter/Footer";
 import "./cart.css";
+import { DELIVERY_CHARGES, TAX } from "../lib/Constant";
 
 const CartPage = () => {
+  const [cartStorage, setCartStorage] = useState(
+    JSON.parse(localStorage.getItem("foodCart")) || []
+  );
+  //   console.log("🚀 ~ CartPage ~ cartStorage:", cartStorage);
+  //   const [foodPrice, setFoodPrice] = useState(0);
+  const [total, setTotal] = useState({
+    foodPrice: 0,
+    totalTax: 0,
+    totalPrice: 0,
+  });
+
+  const getTotal = () => {
+    const foodPrice = cartStorage.reduce((acc, item) => acc + +item.price, 0);
+    // console.log("🚀 ~ getTotal ~ foodPrice:", foodPrice);
+    const totalTax = +((foodPrice * TAX) / 100).toFixed(2);
+    // console.log("🚀 ~ getTotal ~ totalTax:", totalTax);
+    const totalPrice = foodPrice + DELIVERY_CHARGES + totalTax;
+    // console.log("🚀 ~ getTotal ~ totalPrice:", totalPrice);
+    setTotal({ foodPrice, totalTax, totalPrice });
+  };
+
+  useEffect(() => {
+    getTotal();
+  }, [cartStorage]);
+
   const removeFromCart = () => {};
 
   return (
@@ -15,58 +42,51 @@ const CartPage = () => {
         <h1>Your Cart Items</h1>
 
         <div className="cartContainer">
-          <div className="cartItemList">
-            <div className="cartItemLeft">
-              <div className="imageConatiner">
-                <img
-                  src="https://rotimatic.com/cdn/shop/articles/Wheat_Roti.webp?v=1698408236"
-                  alt="cart image"
-                />
+          {cartStorage.length > 0 ? (
+            cartStorage?.map((item) => (
+              <div className="cartItemList" key={item._id}>
+                <div className="cartItemLeft">
+                  <div className="imageConatiner">
+                    <img src={item.imagePath} alt="cart image" />
+                  </div>
+                  <div className="cartTextDetails">
+                    <h3>{item.name}</h3>
+                    <h5>{item.description}</h5>
+                    <DeleteButton />
+                  </div>
+                </div>
+                <div className="cartPrice">Price: {item.price}</div>
               </div>
-              <div className="cartTextDetails">
-                <h3>Roti</h3>
-                <h5>The Best roti in bilara</h5>
-                <DeleteButton />
-              </div>
-            </div>
-            <div className="cartPrice">Price: 500</div>
-          </div>
-          <div className="cartItemList">
-            <div className="cartItemLeft">
-              <div className="imageConatiner">
-                <img
-                  src="https://rotimatic.com/cdn/shop/articles/Wheat_Roti.webp?v=1698408236"
-                  alt="cart image"
-                />
-              </div>
-              <div className="cartTextDetails">
-                <h3>Roti</h3>
-                <h5>The Best roti in bilara</h5>
-                <DeleteButton />
-              </div>
-            </div>
-            <div className="cartPrice">Price: 500</div>
-          </div>
+            ))
+          ) : (
+            <div>No Food Item Added Yet</div>
+          )}
         </div>
         <div className="cartTotalPriceContainer">
           <div className="cartPrice">
             <span>Food Price : </span>
-            <span>500</span>
+            <span>{total.foodPrice} ₹</span>
           </div>
           <div className="cartPrice">
             <span>Tax : </span>
-            <span>18</span>
+            <span>{total.totalTax} ₹</span>
           </div>
           <div className="cartPrice">
             <span>Delivery Charges : </span>
-            <span>50</span>
+            <span>{DELIVERY_CHARGES} ₹</span>
           </div>
-          <div className="cartPrice">
+          <div className="cartPrice topBorder">
             <span>Total Price : </span>
-            <span>500</span>
+            <span>{total.totalPrice} ₹</span>
           </div>
         </div>
+        <div className="orderNowBtn">
+          <button class="orderBtn">
+            <span>Order Now</span>
+          </button>
+        </div>
       </div>
+
       <Footer />
     </>
   );
