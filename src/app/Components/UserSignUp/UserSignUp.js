@@ -4,10 +4,12 @@ import { IoMdEyeOff } from "react-icons/io";
 import "../LoginSignUp/LoginSignUp.css";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Loader from "../Loader/Loader";
+import { useRouter } from "next/navigation";
 
 const UserSignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     password: "",
     email: "",
@@ -16,8 +18,8 @@ const UserSignUp = () => {
     address: "",
     phone: "",
   });
+  const router = useRouter();
   const [error, setError] = useState(false);
-  // const [loading, setLoading] = useState(false);
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -30,7 +32,7 @@ const UserSignUp = () => {
     e.preventDefault();
     // console.log("🚀 ~ Signup ~ user:", user);
 
-    // setLoading(true);
+    setLoading(true);
     //Form Validation
     if (
       !formData.email ||
@@ -50,9 +52,15 @@ const UserSignUp = () => {
 
       console.log("🚀 ~ signUpHandler ~ data:", data);
       if (data.success) {
+        const { result } = data;
+        delete result.password;
+        localStorage.setItem("user", JSON.stringify(result));
+        router.push("/");
         toast.success("user signup successfully");
       }
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       toast.error("user signup failed");
       console.log("🚀 ~ signUpHandler ~ error:", error);
     }
@@ -60,6 +68,7 @@ const UserSignUp = () => {
 
   return (
     <div>
+      {loading && <Loader />}
       <div className="formContainer">
         <form className="form" action="">
           <p className="title">Sign Up</p>

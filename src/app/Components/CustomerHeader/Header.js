@@ -3,14 +3,21 @@
 import Link from "next/link";
 import "./Header.css";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Header = ({ cartItems, removeCartItem }) => {
+  const userInLocalStorage =
+    localStorage.getItem("user") && JSON.parse(localStorage.getItem("user"));
   const localStorageCart =
     localStorage.getItem("foodCart") &&
     JSON.parse(localStorage.getItem("foodCart"));
+  const [user, setUser] = useState(
+    userInLocalStorage ? userInLocalStorage : ""
+  );
   const [noOfItem, setNoOfItem] = useState(localStorageCart?.length);
   // console.log("🚀 ~ Header ~ noOfItem:", noOfItem);
   const [cartData, setCartData] = useState(localStorageCart);
+  const router = useRouter();
 
   useEffect(() => {
     // Object.keys(obj).length === 0;
@@ -50,6 +57,11 @@ const Header = ({ cartItems, removeCartItem }) => {
     }
   }, [removeCartItem]);
 
+  const onLogout = () => {
+    localStorage.removeItem("user");
+    router.push("/userAuth");
+  };
+
   return (
     <div className="header">
       <div className="logo">
@@ -59,13 +71,32 @@ const Header = ({ cartItems, removeCartItem }) => {
         <li>
           <Link href={"/"}>Home</Link>
         </li>
+        {user ? (
+          <>
+            <li>
+              <Link href={"#"}>{user?.name}</Link>
+            </li>
+            <li>
+              <button onClick={onLogout}>Logout</button>
+            </li>
+          </>
+        ) : (
+          <li>
+            <Link href={"/"}>Login</Link>
+          </li>
+        )}
         <li>
-          <Link href={"/"}>Login</Link>
-        </li>
-        <li>
-          <Link href={noOfItem ? "/cart" : "#"}>
-            Cart {noOfItem ? noOfItem : 0}
+          <Link href={noOfItem ? "/cart" : "#"} className="cartIconLink">
+            <img
+              className="shoppingCartIcon"
+              src="./shopping-cart.png"
+              alt="shopping cart"
+            />
+            <div className="cartQuenttity">{noOfItem ? noOfItem : 0}</div>
           </Link>
+          {/* <Link href={noOfItem ? "/cart" : "#"}>
+            Cart {noOfItem ? noOfItem : 0}
+          </Link> */}
         </li>
         <li>
           <Link href={"/"}>Add Rastaurant</Link>
