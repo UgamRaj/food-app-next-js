@@ -82,7 +82,7 @@ const Header = ({ cartItems, removeCartItem }) => {
           </>
         ) : (
           <li>
-            <Link href={"/"}>Login</Link>
+            <Link href={"/userAuth"}>Login</Link>
           </li>
         )}
         <li>

@@ -20,12 +20,25 @@ const UserSignUp = () => {
   });
   const router = useRouter();
   const [error, setError] = useState(false);
+  const [state, setState] = useState("Sign In");
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
   const changehandler = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const loginHandler = async (e) => {
+    // console.log("login", formData);
+    e.preventDefault();
+    setLoading(true);
+    try {
+    } catch (error) {
+      console.log("🚀 ~ loginHandler ~ error:", error);
+
+      setLoading(false);
+    }
   };
 
   const signUpHandler = async (e) => {
@@ -70,76 +83,85 @@ const UserSignUp = () => {
     <div>
       {loading && <Loader />}
       <div className="formContainer">
-        <form className="form" action="">
-          <p className="title">Sign Up</p>
-          <p className="message">Sign Up now and get access to our app.</p>
+        <form
+          className="form"
+          onSubmit={(e) => {
+            state === "Sign In" ? loginHandler(e) : signUpHandler(e);
+          }}
+        >
+          <p className="title">{state}</p>
+          <p className="message">{state} now and get access to our app.</p>
 
-          <label>
-            <input
-              className="input"
-              type="text"
-              placeholder=""
-              required
-              name="name"
-              value={formData.name}
-              onChange={changehandler}
-            />
+          {state == "Sign Up" && (
+            <>
+              <label>
+                <input
+                  className="input"
+                  type="text"
+                  placeholder=""
+                  required
+                  name="name"
+                  value={formData.name}
+                  onChange={changehandler}
+                />
 
-            {error && !formData.name ? (
-              <span className="inputError">*Please Enter Name</span>
-            ) : (
-              <span>Enter name</span>
-            )}
-          </label>
-          <label>
-            <input
-              className="input"
-              type="text"
-              placeholder=""
-              required
-              name="city"
-              value={formData.city}
-              onChange={changehandler}
-            />
-            {error && !formData.city ? (
-              <span className="inputError">*Please Enter City</span>
-            ) : (
-              <span>Enter City</span>
-            )}
-          </label>
+                {error && !formData.name ? (
+                  <span className="inputError">*Please Enter Name</span>
+                ) : (
+                  <span>Enter name</span>
+                )}
+              </label>
+              <label>
+                <input
+                  className="input"
+                  type="text"
+                  placeholder=""
+                  required
+                  name="city"
+                  value={formData.city}
+                  onChange={changehandler}
+                />
+                {error && !formData.city ? (
+                  <span className="inputError">*Please Enter City</span>
+                ) : (
+                  <span>Enter City</span>
+                )}
+              </label>
 
-          <label>
-            <input
-              className="input"
-              type="text"
-              placeholder=""
-              required
-              name="address"
-              value={formData.address}
-              onChange={changehandler}
-            />
-            {error && !formData.address ? (
-              <span className="inputError">*Please Enter address</span>
-            ) : (
-              <span>Enter address</span>
-            )}
-          </label>
-          <label>
-            <input
-              className="input"
-              type="number"
-              placeholder=""
-              required
-              name="phone"
-              value={formData.phone}
-              onChange={changehandler}
-            />
-            {error && !formData.phone ? (
-              <span className="inputError">*Please Enter Contact No.</span>
-            ) : (
-              <span>Enter Contact No.</span>
-            )}
-          </label>
+              <label>
+                <input
+                  className="input"
+                  type="text"
+                  placeholder=""
+                  required
+                  name="address"
+                  value={formData.address}
+                  onChange={changehandler}
+                />
+                {error && !formData.address ? (
+                  <span className="inputError">*Please Enter address</span>
+                ) : (
+                  <span>Enter address</span>
+                )}
+              </label>
+              <label>
+                <input
+                  className="input"
+                  type="number"
+                  placeholder=""
+                  required
+                  name="phone"
+                  value={formData.phone}
+                  onChange={changehandler}
+                />
+                {error && !formData.phone ? (
+                  <span className="inputError">*Please Enter Contact No.</span>
+                ) : (
+                  <span>Enter Contact No.</span>
+                )}
+              </label>
+            </>
+          )}
 
           <label>
             <input
@@ -187,9 +209,21 @@ const UserSignUp = () => {
             </button>
           </label>
 
-          <button className="submit" onClick={signUpHandler}>
+          <button className="submit" type="submit">
             Submit
           </button>
+
+          {state === "Sign Up" ? (
+            <p className="signin">
+              Already have an account?
+              <span onClick={() => setState("Login")}>Signin</span>
+            </p>
+          ) : (
+            <p className="signin">
+              Create an account?
+              <span onClick={() => setState("Sign Up")}>Register</span>
+            </p>
+          )}
         </form>
       </div>
     </div>
