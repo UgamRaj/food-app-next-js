@@ -33,7 +33,30 @@ const UserSignUp = () => {
     // console.log("login", formData);
     e.preventDefault();
     setLoading(true);
+    if (!formData.email || !formData.password) {
+      return setError(true);
+    }
+    setError(false);
+
+    const body = JSON.stringify({
+      email: formData.email,
+      password: formData.password,
+    });
     try {
+      const { data } = await axios.post(
+        "http://localhost:3000/api/user/login",
+        body
+      );
+      console.log("🚀 ~ loginHandler ~ data:", data);
+
+      if (data.success) {
+        const { result } = data;
+        delete result.password;
+        localStorage.setItem("user", JSON.stringify(result));
+        router.push("/");
+        toast.success("user Login successfully");
+      }
+      setLoading(false);
     } catch (error) {
       console.log("🚀 ~ loginHandler ~ error:", error);
 

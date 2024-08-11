@@ -4,15 +4,16 @@ import { useEffect, useState } from "react";
 import DeleteButton from "../Components/Button/DeleteButton";
 import Header from "../Components/CustomerHeader/Header";
 import Footer from "../Components/RestroFooter/Footer";
-import "./cart.css";
+import "../cart/cart.css";
 import { DELIVERY_CHARGES, TAX } from "../lib/Constant";
-import { useRouter } from "next/navigation";
 
-const CartPage = () => {
+const OrderNow = () => {
   const [cartStorage, setCartStorage] = useState(
     JSON.parse(localStorage.getItem("foodCart")) || []
   );
-  const router = useRouter();
+  const [userStorgae, setUserStorage] = useState(
+    JSON.parse(localStorage.getItem("user"))
+  );
   const [total, setTotal] = useState({
     foodPrice: 0,
     totalTax: 0,
@@ -33,39 +34,28 @@ const CartPage = () => {
     getTotal();
   }, [cartStorage]);
 
-  const onOrderNow = () => {
-    router.push("/order");
-  };
-
   const removeFromCart = () => {};
 
   return (
     <>
       <Header />
       <div className="mainCart">
-        <h1>Your Cart Items</h1>
-
-        <div className="cartContainer">
-          {cartStorage.length > 0 ? (
-            cartStorage?.map((item) => (
-              <div className="cartItemList" key={item._id}>
-                <div className="cartItemLeft">
-                  <div className="imageConatiner">
-                    <img src={item.imagePath} alt="cart image" />
-                  </div>
-                  <div className="cartTextDetails">
-                    <h3>{item.name}</h3>
-                    <h5>{item.description}</h5>
-                    <DeleteButton />
-                  </div>
-                </div>
-                <div className="cartPrice">Price: {item.price}</div>
-              </div>
-            ))
-          ) : (
-            <div>No Food Item Added Yet</div>
-          )}
+        <h1>User Details</h1>
+        <div className="cartTotalPriceContainer">
+          <div className="cartPrice">
+            <span>Name : </span>
+            <span>{userStorgae.name} </span>
+          </div>
+          <div className="cartPrice">
+            <span>Address : </span>
+            <span>{userStorgae.address} </span>
+          </div>
+          <div className="cartPrice">
+            <span>Phone : </span>
+            <span>{userStorgae.phone} </span>
+          </div>
         </div>
+        <h1>Amount Details</h1>
         <div className="cartTotalPriceContainer">
           <div className="cartPrice">
             <span>Food Price : </span>
@@ -84,9 +74,16 @@ const CartPage = () => {
             <span>{total.totalPrice} ₹</span>
           </div>
         </div>
+        <h1>Payment Method</h1>
+        <div className="cartTotalPriceContainer">
+          <div className="cartPrice">
+            <span>Cash on Delivery : </span>
+            <span>{total.totalPrice} ₹</span>
+          </div>
+        </div>
         <div className="orderNowBtn">
-          <button class="orderBtn" onClick={onOrderNow}>
-            <span>Order Now</span>
+          <button class="orderBtn">
+            <span>Place Your Order Now</span>
           </button>
         </div>
       </div>
@@ -96,4 +93,4 @@ const CartPage = () => {
   );
 };
 
-export default CartPage;
+export default OrderNow;
