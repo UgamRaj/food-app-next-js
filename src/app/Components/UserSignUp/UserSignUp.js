@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import Loader from "../Loader/Loader";
 import { useRouter } from "next/navigation";
 
-const UserSignUp = () => {
+const UserSignUp = ({ redirect }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -53,7 +53,11 @@ const UserSignUp = () => {
         const { result } = data;
         delete result.password;
         localStorage.setItem("user", JSON.stringify(result));
-        router.push("/");
+        if (redirect?.order) {
+          router.push("/order");
+        } else {
+          router.push("/");
+        }
         toast.success("user Login successfully");
       }
       setLoading(false);
@@ -91,7 +95,11 @@ const UserSignUp = () => {
         const { result } = data;
         delete result.password;
         localStorage.setItem("user", JSON.stringify(result));
-        router.push("/");
+        if (redirect?.order) {
+          router.push("/order");
+        } else {
+          router.push("/");
+        }
         toast.success("user signup successfully");
       }
       setLoading(false);

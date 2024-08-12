@@ -6,6 +6,9 @@ import Header from "../Components/CustomerHeader/Header";
 import Footer from "../Components/RestroFooter/Footer";
 import "../cart/cart.css";
 import { DELIVERY_CHARGES, TAX } from "../lib/Constant";
+import axios from "axios";
+import { toast } from "react-toastify";
+import Loader from "../Components/Loader/Loader";
 
 const OrderNow = () => {
   const [cartStorage, setCartStorage] = useState(
@@ -19,6 +22,7 @@ const OrderNow = () => {
     totalTax: 0,
     totalPrice: 0,
   });
+  const [loading, setLoading] = useState(false);
 
   const getTotal = () => {
     const foodPrice = cartStorage.reduce((acc, item) => acc + +item.price, 0);
@@ -34,10 +38,47 @@ const OrderNow = () => {
     getTotal();
   }, [cartStorage]);
 
+  const onPlcaeOrderNow = async () => {
+    setLoading(true);
+    const userId = JSON.parse(localStorage.getItem("user"))._id;
+    const cart = JSON.parse(localStorage.getItem("foodCart"));
+    const restoId = cart[0].restoId;
+    const foodItemIds = cart?.map((item) => item._id).toString();
+
+    const deliveryBoyId = "66b43f650558edba8bfa75ca";
+
+    const orderCollection = {
+      restoId,
+      userId,
+      deliveryBoyId,
+      foodItemIds,
+      status: "confirm",
+      amount: total.totalPrice,
+    };
+    // console.log("🚀 ~ onPlcaeOrderNow ~ orderCollection:", orderCollection);
+
+    const body = JSON.stringify(orderCollection);
+    try {
+      const { data } = await axios.post(
+        "http://localhost:3000/api/order",
+        body
+      );
+      if (data.success) {
+        toast.success("Order Confirmed");
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      toast.error("Order place failed");
+      console.log("🚀 ~ onPlcaeOrderNow ~ error:", error);
+    }
+  };
+
   const removeFromCart = () => {};
 
   return (
     <>
+      {loading && <Loader />}
       <Header />
       <div className="mainCart">
         <h1>User Details</h1>
@@ -82,7 +123,7 @@ const OrderNow = () => {
           </div>
         </div>
         <div className="orderNowBtn">
-          <button class="orderBtn">
+          <button class="orderBtn" onClick={onPlcaeOrderNow}>
             <span>Place Your Order Now</span>
           </button>
         </div>

@@ -34,7 +34,11 @@ const CartPage = () => {
   }, [cartStorage]);
 
   const onOrderNow = () => {
-    router.push("/order");
+    if (JSON.parse(localStorage.getItem("user"))) {
+      router.push("/order");
+    } else {
+      router.push("/userAuth?order=true");
+    }
   };
 
   const removeFromCart = () => {};
