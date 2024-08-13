@@ -5,7 +5,7 @@ import "./Header.css";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-const Header = ({ cartItems, removeCartItem }) => {
+const Header = ({ cartItems, removeCartItem, isRemoveCartData }) => {
   const userInLocalStorage =
     localStorage.getItem("user") && JSON.parse(localStorage.getItem("user"));
   const localStorageCart =
@@ -56,6 +56,14 @@ const Header = ({ cartItems, removeCartItem }) => {
       }
     }
   }, [removeCartItem]);
+
+  useEffect(() => {
+    if (isRemoveCartData) {
+      setCartData([]);
+      setNoOfItem(0);
+      localStorage.removeItem("foodCart");
+    }
+  }, [isRemoveCartData]);
 
   const onLogout = () => {
     localStorage.removeItem("user");

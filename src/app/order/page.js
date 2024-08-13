@@ -9,6 +9,7 @@ import { DELIVERY_CHARGES, TAX } from "../lib/Constant";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Loader from "../Components/Loader/Loader";
+import { useRouter } from "next/navigation";
 
 const OrderNow = () => {
   const [cartStorage, setCartStorage] = useState(
@@ -23,6 +24,8 @@ const OrderNow = () => {
     totalPrice: 0,
   });
   const [loading, setLoading] = useState(false);
+  const [removeCartData, setRemoveCartData] = useState(false);
+  const router = useRouter();
 
   const getTotal = () => {
     const foodPrice = cartStorage.reduce((acc, item) => acc + +item.price, 0);
@@ -64,6 +67,8 @@ const OrderNow = () => {
         body
       );
       if (data.success) {
+        setRemoveCartData(true);
+        router.push("/profile");
         toast.success("Order Confirmed");
       }
       setLoading(false);
@@ -79,7 +84,7 @@ const OrderNow = () => {
   return (
     <>
       {loading && <Loader />}
-      <Header />
+      <Header isRemoveCartData={removeCartData} />
       <div className="mainCart">
         <h1>User Details</h1>
         <div className="cartTotalPriceContainer">
