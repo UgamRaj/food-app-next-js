@@ -23,6 +23,8 @@ export const GET = async (req) => {
   await mongoose.connect(connectionStr);
   let result = await orderSchema.find({ userId: userId });
   if (result) {
+    // console.log("🚀 ~ GET ~ result:", result);
+
     let restoData = await Promise.all(
       result.map(async (item) => {
         let restoInfo = {};

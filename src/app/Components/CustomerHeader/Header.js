@@ -82,7 +82,7 @@ const Header = ({ cartItems, removeCartItem, isRemoveCartData }) => {
         {user ? (
           <>
             <li>
-              <Link href={"#"}>{user?.name}</Link>
+              <Link href={"/profile"}>{user?.name}</Link>
             </li>
             <li>
               <button onClick={onLogout}>Logout</button>

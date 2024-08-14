@@ -4,7 +4,10 @@ import { toast } from "react-toastify";
 const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
 
 const initialState = {
-  restroData: JSON.parse(localStorage.getItem("foodData")) || [],
+  restroData:
+    (localStorage.getItem("foodData") &&
+      JSON.parse(localStorage.getItem("foodData"))) ||
+    [],
   isLoading: false,
   foodItems: [],
 };
