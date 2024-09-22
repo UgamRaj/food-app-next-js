@@ -3,13 +3,12 @@ import axios from "axios";
 const { createSlice, nanoid, createAsyncThunk } = require("@reduxjs/toolkit");
 
 const initialState = {
-  user:
-    (localStorage.getItem("foodData") &&
-      JSON.parse(localStorage.getItem("foodData"))) ||
-    [],
+  user: window.localStorage.getItem("foodData")
+    ? JSON.parse(localStorage.getItem("foodData"))
+    : [],
   isLoading: false,
   isUserAuthenticated:
-    localStorage.getItem("foodData") &&
+    window.localStorage.getItem("foodData") &&
     JSON.parse(localStorage.getItem("foodData"))
       ? true
       : false,
