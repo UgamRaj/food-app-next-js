@@ -41,6 +41,7 @@ const CartPage = () => {
     }
   };
 
+  // Removing cart item
   const removeFromCart = () => {};
 
   return (

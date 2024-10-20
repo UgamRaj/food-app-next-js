@@ -48,7 +48,7 @@ const OrderNow = () => {
     const restoId = cart[0].restoId;
     const foodItemIds = cart?.map((item) => item._id).toString();
 
-    const deliveryBoyId = "66b43f650558edba8bfa75ca";
+    const deliveryBoyId = "66b43f650558edba8bfa75ca"; // one id for checking
 
     const orderCollection = {
       restoId,
