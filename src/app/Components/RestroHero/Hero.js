@@ -117,6 +117,13 @@ const Hero = () => {
               className="restoWrapper"
               key={_id}
             >
+              <div className="imgContainer">
+                <img
+                  src="https://elledecor.in/wp-content/uploads/2023/12/H1_RL_CRAYCRAFT.jpg"
+                  alt="restro"
+                />
+              </div>
+
               <div className="restroHeading">
                 <h3>{name}</h3>
                 <h5>Contact: {phone}</h5>

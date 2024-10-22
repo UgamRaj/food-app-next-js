@@ -11,6 +11,7 @@ const Profile = () => {
 
   const onGetMyOrders = async () => {
     const userStorage = JSON.parse(localStorage.getItem("user"));
+    console.log("🚀 ~ onGetMyOrders ~ userStorage:", userStorage);
     try {
       const { data } = await axios.get(
         `http://localhost:3000/api/order?id=66b4266c0558edba8bfa75c8`
