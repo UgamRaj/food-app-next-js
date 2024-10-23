@@ -92,6 +92,7 @@ const Hero = () => {
             className="selectInput"
             placeholder="Select Place"
             value={selectedLocations}
+            defaultValue="Search..."
             onClick={() => setShowLocation(true)}
           />
           <ul className="locationsList">
@@ -118,10 +119,7 @@ const Hero = () => {
               key={_id}
             >
               <div className="imgContainer">
-                <img
-                  src="https://elledecor.in/wp-content/uploads/2023/12/H1_RL_CRAYCRAFT.jpg"
-                  alt="restro"
-                />
+                <img src="restro.jpg" alt="restro" />
               </div>
 
               <div className="restroHeading">
